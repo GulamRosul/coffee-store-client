@@ -12,6 +12,25 @@ const SingUp = () => {
     createUser(email, password)
       .then((result) => {
         console.log(result.user);
+
+          //   new user has been created
+          const createdAt = result.user?.metadata?.creationTime;
+
+        const user = { email, createdAt };
+        fetch("http://localhost:5000/coffee", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(user),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.insertedId) {
+              console.log("user added to the database");
+            }
+            console.log(data);
+          });
       })
       .catch((error) => {
         console.error(error);
